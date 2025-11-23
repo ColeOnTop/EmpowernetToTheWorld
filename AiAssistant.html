@@ -171,7 +171,7 @@
         const chatMessages = document.getElementById('chat-messages');
 
         const HUGGING_FACE_API = 'https://api-inference.huggingface.co/models/gpt2'; // replace with your model
-        const API_KEY = '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';
+        const API_KEY = process.env.HF_API_KEY;
 
        async function generateResponse(message) {
     try {
