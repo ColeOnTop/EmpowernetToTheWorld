@@ -23,6 +23,15 @@
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+        
+        .video-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
         .resource-card:hover {
             transform: translateY(-5px);
@@ -36,6 +45,17 @@
         }
 
         .resource-card p {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        .video-card h3 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .video-card p {
             color: var(--text-secondary);
             line-height: 1.5;
             font-size: 0.95rem;
@@ -72,8 +92,11 @@
     <!-- Main Content -->
     <section id="main-content" class="section">
         <h2 class="section-title">Available Resources</h2>
-        <div class="resources-grid container">
-
+        <div class="resources-grid">
+            <div class="video-card" id="onlineSafetyCard">
+                <h3>Online Safety Video</h3>
+                <p>Learn how to protect your personal information, maintain privacy, and handle online risks.</p>
+            </div>
             <div class="resource-card" data-url="resources/digital_literacy.pdf">
                 <h3>Digital Literacy Guide</h3>
                 <p>A complete guide to digital skills, online safety, and practical exercises for women and girls.</p>
@@ -84,24 +107,128 @@
                 <p>Practical advice, case studies, and tools for women to take on leadership roles effectively.</p>
             </div>
 
-            <div class="resource-card" data-url="resources/online_safety.mp4">
-                <h3>Online Safety Video</h3>
-                <p>Learn how to protect your personal information, maintain privacy, and handle online risks.</p>
-            </div>
-
             <div class="resource-card" data-url="resources/self_defense.pdf">
                 <h3>Self-Defense Tips</h3>
                 <p>Step-by-step safety and self-defense techniques for women in public spaces.</p>
             </div>
-
         </div>
+
+        <!-- Video Modal -->
+        <div id="videoModal" class="video-modal">
+            <div class="video-modal-content">
+                <span class="video-close">&times;</span>
+                <div class="video-iframe-container">
+                    <iframe 
+                        id="videoIframe"
+                        src=""
+                        title="How to protect your privacy online"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    
+
+   
+            <!-- CSS -->
+            <style>
+                /* Video Modal */
+                .video-modal {
+                    display: none; 
+                    position: fixed; 
+                    z-index: 1000; 
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgba(0,0,0,0.7);
+                    padding: 20px; /* add spacing on small screens */
+                    box-sizing: border-box;
+                }
+
+                .video-modal-content {
+                    background-color: #fff;
+                    margin: 5% auto;
+                    padding: 0;
+                    border-radius: 10px;
+                    width: 100%;
+                    max-width: 900px;
+                }
+
+                .video-close {
+                    color: #aaa;
+                    float: right;
+                    font-size: 28px;
+                    font-weight: bold;
+                    padding: 10px 15px;
+                    cursor: pointer;
+                }
+
+                .video-close:hover {
+                    color: #000;
+                }
+
+                /* Video iframe container - responsive */
+                .video-iframe-container {
+                    position: relative;
+                    padding-bottom: 56.25%; /* 16:9 ratio */
+                    height: 0;
+                    overflow: hidden;
+                }
+
+                .video-iframe-container iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border: 0;
+                }
+
+                /* Optional: small adjustment for video-card hover effect */
+                .video-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                }
+
+            </style>
+
+            <!-- JS -->
+            <script>
+                const card = document.getElementById("onlineSafetyCard");
+                const modal = document.getElementById("videoModal");
+                const iframe = document.getElementById("videoIframe");
+                const span = document.getElementsByClassName("video-close")[0];
+
+                card.onclick = () => {
+                    iframe.src = "https://www.youtube.com/embed/JO55V34EnK8?autoplay=1";
+                    modal.style.display = "block";
+                }
+
+                span.onclick = () => {
+                    modal.style.display = "none";
+                    iframe.src = ""; // stop video
+                }
+
+                window.onclick = (event) => {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                        iframe.src = ""; // stop video
+                    }
+                }
+
+            </script>
+            
     </section>
 
     <!-- Modal for viewing resources -->
     <div class="modal-overlay" id="resource-modal">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Resource Preview</h3>
+                <h4 class="modal-title">Resource Preview</h4>
                 <span class="modal-close" id="modal-close">&times;</span>
             </div>
             <div class="modal-content">

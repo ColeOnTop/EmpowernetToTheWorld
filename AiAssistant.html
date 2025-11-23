@@ -104,6 +104,25 @@
             background: var(--accent);
             box-shadow: 0 10px 20px var(--accent-glow);
         }
+        .info-grid {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
     </style>
 </head>
 <body>
@@ -144,6 +163,68 @@
         </div>
     </section>
 
+    <section id="password-info" class="section glass">
+    <div class="container">
+        <h2 class="section-title">Why Strong Passwords Matter</h2>
+
+        <p class="description">
+            A strong password is one of the most powerful defenses against online harassment,
+            impersonation, hacking, and unauthorized access to your digital accounts.
+            Women in public life, activism, leadership, and online spaces are especially
+            targeted by coordinated attacks — often starting with weak or reused passwords.
+        </p>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>Prevent Account Takeovers</h3>
+                <p>
+                    Harassers often try to break into social media or email accounts to post harmful
+                    content, leak private data, or impersonate victims. A strong password makes these
+                    attacks extremely difficult.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h3>Stop Impersonation Attempts</h3>
+                <p>
+                    When your accounts are secure, attackers cannot pretend to be you online
+                    — reducing the chances of misinformation, character attacks, or deepfake distribution.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h3>Reduce Doxxing Risks</h3>
+                <p>
+                    Hackers often access personal information through weak logins. Strong passwords
+                    help protect your private data, location, contacts, and sensitive files.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <h3>Build Digital Confidence</h3>
+                <p>
+                    Knowing your accounts are fully secure empowers you to participate more safely
+                    in public conversations, leadership roles, and online engagement.
+                </p>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle" style="margin-top: 30px;">How to Use This Password Strength Checker</h3>
+        <ul class="description">
+            <li>Type your password into the checker field below.</li>
+            <li>The tool will instantly analyze its strength.</li>
+            <li>You’ll get feedback on what makes it strong or weak.</li>
+            <li>Use the suggestions to make your password harder to crack.</li>
+        </ul>
+
+        <p class="description">
+            This feature does not store or upload your password. It runs entirely on your device
+            to ensure privacy and safety.
+        </p>
+    </div>
+    </section>
+
+
     <!-- Password Strength Checker -->
     <section class="section">
         <div class="password-section">
@@ -162,62 +243,76 @@
             <a href="https://wa.me/254700000000" target="_blank" class="social-link">💬</a>
             <a href="tel:911" class="social-link">📞</a>
         </div>
-    </section>
-
-    <!-- JS for Chat and Password Strength -->
+      </section>
+    
     <script>
-        const chatForm = document.getElementById('chat-form');
-        const chatInput = document.getElementById('chat-input');
-        const chatMessages = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+    const OPENAI_API_KEY = "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"; // your real OpenAI key
+    const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 
-        const HUGGING_FACE_API = 'https://api-inference.huggingface.co/models/gpt2'; // replace with your model
-        const API_KEY = process.env.HF_API_KEY;
+    async function generateResponse(message) {
+        try {
+            const response = await fetch(OPENAI_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${OPENAI_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: "gpt-4o-mini",
+                    messages: [
+                        { role: "system", content: "You are EmpowerNet AI, a friendly assistant for digital literacy, safety, confidence and women empowerment." },
+                        { role: "user", content: message }
+                    ],
+                    max_tokens: 150
+                })
+            });
 
-       async function generateResponse(message) {
-    try {
-        const res = await fetch('http://localhost:3000/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message })
-        });
-        const data = await res.json();
-        return data.reply;
-    } catch (err) {
-        return "Error connecting to AI. Please try again later.";
+            const data = await response.json();
+            return data.choices?.[0]?.message?.content || "I couldn't generate a response.";
+        } catch (err) {
+            return "Error connecting to AI. Please try again.";
+        }
     }
-  }
 
-        chatForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const userMessage = chatInput.value.trim();
-            if (!userMessage) return;
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userMessage = chatInput.value.trim();
+        if (!userMessage) return;
 
-            chatMessages.innerHTML += `<div class="chat-message user">${userMessage}</div>`;
-            chatInput.value = '';
+        chatMessages.innerHTML += `<div class="chat-message user">${userMessage}</div>`;
+        chatInput.value = "";
 
-            chatMessages.innerHTML += `<div class="chat-message bot">Typing...</div>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Bot typing placeholder
+        chatMessages.innerHTML += `<div class="chat-message bot">Typing...</div>`;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            const botMessage = await generateResponse(userMessage);
-            chatMessages.querySelector('.bot:last-child').textContent = botMessage;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        });
+        const botMessage = await generateResponse(userMessage);
 
-        // Password Strength Checker
-        const passwordInput = document.getElementById('password-input');
-        const passwordStrength = document.getElementById('password-strength');
+        // Replace last "Typing..."
+        chatMessages.querySelector(".bot:last-child").textContent = botMessage;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
 
-        passwordInput.addEventListener('input', () => {
-            const val = passwordInput.value;
-            let strength = 'Weak';
-            if (val.length >= 8 && /[A-Z]/.test(val) && /[0-9]/.test(val) && /[\W]/.test(val)) {
-                strength = 'Strong';
-            } else if (val.length >= 6) {
-                strength = 'Medium';
-            }
-            passwordStrength.textContent = `Strength: ${strength}`;
-        });
-    </script>
+    
+    const passwordInput = document.getElementById('password-input');
+    const passwordStrength = document.getElementById('password-strength');
+
+    passwordInput.addEventListener('input', () => {
+        const val = passwordInput.value;
+        let strength = "Weak";
+
+        if (val.length >= 8 && /[A-Z]/.test(val) && /[0-9]/.test(val) && /[\W]/.test(val)) {
+            strength = "Strong";
+        } else if (val.length >= 6) {
+            strength = "Medium";
+        }
+
+        passwordStrength.textContent = `Strength: ${strength}`;
+    });
+</script>
 
 </body>
 </html>
