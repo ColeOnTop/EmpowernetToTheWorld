@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmpowerNet - Resources</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        /* Optional: Resource-specific overrides */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .resource-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .resource-card h3 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .resource-card p {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav glass">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="DigitalLiteracy.html">Digital Literacy</a></li>
+            <li><a href="WomenPublicLife.html">Women & Public Life</a></li>
+            <li><a href="AiAssistant.html">AI Assistant</a></li>
+            <li><a href="SafetyToolkit.html">Safety Toolkit</a></li>
+            <li><a href="Resources.html">Resources</a></li>
+            <li><a href="Support.html">Support</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content container">
+            <h1>Resources</h1>
+            <p class="subtitle">Knowledge and materials to empower women</p>
+            <p class="description">
+                Access articles, guides, PDFs, and videos to help improve digital literacy, leadership skills, and safety awareness.
+            </p>
+            <a href="#main-content" class="cta-button">Explore Resources</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section id="main-content" class="section">
+        <h2 class="section-title">Available Resources</h2>
+        <div class="resources-grid container">
+
+            <div class="resource-card" data-url="resources/digital_literacy.pdf">
+                <h3>Digital Literacy Guide</h3>
+                <p>A complete guide to digital skills, online safety, and practical exercises for women and girls.</p>
+            </div>
+
+            <div class="resource-card" data-url="resources/women_leadership.pdf">
+                <h3>Women Leadership Handbook</h3>
+                <p>Practical advice, case studies, and tools for women to take on leadership roles effectively.</p>
+            </div>
+
+            <div class="resource-card" data-url="resources/online_safety.mp4">
+                <h3>Online Safety Video</h3>
+                <p>Learn how to protect your personal information, maintain privacy, and handle online risks.</p>
+            </div>
+
+            <div class="resource-card" data-url="resources/self_defense.pdf">
+                <h3>Self-Defense Tips</h3>
+                <p>Step-by-step safety and self-defense techniques for women in public spaces.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Modal for viewing resources -->
+    <div class="modal-overlay" id="resource-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Resource Preview</h3>
+                <span class="modal-close" id="modal-close">&times;</span>
+            </div>
+            <div class="modal-content">
+                <iframe id="modal-iframe" class="modal-iframe" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        $(document).ready(function() {
+            $('.resource-card').click(function() {
+                const url = $(this).data('url');
+                $('#modal-iframe').attr('src', url);
+                $('#resource-modal').addClass('active');
+                $('body').addClass('modal-open');
+            });
+
+            $('#modal-close').click(function() {
+                $('#resource-modal').removeClass('active');
+                $('body').removeClass('modal-open');
+                $('#modal-iframe').attr('src', '');
+            });
+        });
+    </script>
+
+</body>
+</html>
